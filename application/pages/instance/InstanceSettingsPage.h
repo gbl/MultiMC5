@@ -62,6 +62,7 @@ private slots:
 	void on_javaBrowseBtn_clicked();
 
 	void applySettings();
+    void populateAccountSelect();
 	void loadSettings();
 
 	void checkerFinished();

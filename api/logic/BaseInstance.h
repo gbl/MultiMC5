@@ -238,6 +238,9 @@ public:
 
 	int getConsoleMaxLines() const;
 	bool shouldStopOnConsoleOverflow() const;
+        
+	bool hasPreferredAccount();
+	QString getPreferredAccount();
 
 protected:
 	void changeStatus(Status newStatus);

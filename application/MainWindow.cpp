@@ -1758,6 +1758,12 @@ void MainWindow::instanceChanged(const QModelIndex &current, const QModelIndex &
 		updateToolsMenu();
 
 		MMC->settings()->set("SelectedInstance", m_selectedInstance->id());
+        if (m_selectedInstance->hasPreferredAccount()) {
+            qDebug() << "Set Active Account to " << m_selectedInstance->getPreferredAccount();
+            MMC->accounts()->setActiveAccountByCharacterName(m_selectedInstance->getPreferredAccount());
+        } else {
+            qDebug() << "Has no preferred account";
+        }
 	}
 	else
 	{

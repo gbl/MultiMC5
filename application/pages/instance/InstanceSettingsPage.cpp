@@ -8,6 +8,7 @@
 #include "dialogs/VersionSelectDialog.h"
 #include "JavaCommon.h"
 #include "MultiMC.h"
+#include <minecraft/auth/MojangAccountList.h>
 
 #include <java/JavaInstallList.h>
 #include <FileSystem.h>
@@ -59,6 +60,18 @@ void InstanceSettingsPage::applySettings()
 		m_settings->reset("AutoCloseConsole");
 		m_settings->reset("ShowConsoleOnError");
 	}
+        
+    // Preferred Account
+    bool prefAccount = ui->accountSettingsBox->isChecked();
+    m_settings->set("PreferAccount", prefAccount);
+    if (prefAccount)
+    {
+            m_settings->set("PreferredAccount", ui->accountSelectBox->currentText());
+    }
+    else
+    {
+            m_settings->reset("PreferredAccount");
+    }
 
 	// Window Size
 	bool window = ui->windowSizeGroupBox->isChecked();
@@ -147,6 +160,32 @@ void InstanceSettingsPage::applySettings()
 	}
 }
 
+void InstanceSettingsPage::populateAccountSelect()
+{
+    int index;
+    auto list=ui->accountSelectBox;
+    list->clear();
+        
+    std::shared_ptr<MojangAccountList> accounts = MMC->accounts();
+    if (accounts->count()>0)
+    {
+        for (int i=0; i<accounts->count(); i++)
+        {
+            QList<AccountProfile> profiles=accounts->at(i)->profiles();
+            if (profiles.count()>0)
+            {
+            	list->addItem(profiles.at(0).name);
+            }
+        }
+    }
+        
+    QString preferredAccount=m_settings->get("PreferredAccount").toString();
+    if (!preferredAccount.isEmpty() && (index=list->findText(preferredAccount))!=-1)
+    {
+            list->setCurrentIndex(index);
+    }
+}
+
 void InstanceSettingsPage::loadSettings()
 {
 	// Console
@@ -155,6 +194,10 @@ void InstanceSettingsPage::loadSettings()
 	ui->autoCloseConsoleCheck->setChecked(m_settings->get("AutoCloseConsole").toBool());
 	ui->showConsoleErrorCheck->setChecked(m_settings->get("ShowConsoleOnError").toBool());
 
+    // Preferred Account
+    ui->accountSettingsBox->setChecked(m_settings->get("PreferAccount").toBool());
+    populateAccountSelect();
+        
 	// Window Size
 	ui->windowSizeGroupBox->setChecked(m_settings->get("OverrideWindow").toBool());
 	ui->maximizedCheckBox->setChecked(m_settings->get("LaunchMaximized").toBool());

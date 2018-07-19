@@ -148,6 +148,18 @@ void MojangAccountList::setActiveAccount(const QString &username)
 	}
 }
 
+void MojangAccountList::setActiveAccountByCharacterName(const QString &charname)
+{
+	for (MojangAccountPtr account : m_accounts)
+	{
+		for (AccountProfile profile: account->profiles())
+		{
+			if (profile.name == charname)
+				setActiveAccount(account->username());
+		}
+	}
+}
+
 void MojangAccountList::accountChanged()
 {
 	// the list changed. there is no doubt.

@@ -53,6 +53,9 @@ BaseInstance::BaseInstance(SettingsObjectPtr globalSettings, SettingsObjectPtr s
 
 	m_settings->registerPassthrough(globalSettings->getSetting("ConsoleMaxLines"), nullptr);
 	m_settings->registerPassthrough(globalSettings->getSetting("ConsoleOverflowStop"), nullptr);
+                
+    m_settings->registerSetting("PreferAccount", false);
+    m_settings->registerSetting("PreferredAccount", "");
 }
 
 QString BaseInstance::getPreLaunchCommand()
@@ -304,4 +307,14 @@ void BaseInstance::setProvider(BaseInstanceProvider* provider)
 BaseInstanceProvider* BaseInstance::provider() const
 {
 	return m_provider;
+}
+
+bool BaseInstance::hasPreferredAccount() 
+{
+	return settings()->get("PreferAccount").toBool();
+}
+
+QString BaseInstance::getPreferredAccount()
+{
+	return settings()->get("PreferredAccount").toString();
 }

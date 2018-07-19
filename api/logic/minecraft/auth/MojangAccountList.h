@@ -128,6 +128,12 @@ public:
 	 * If the username given is an empty string, sets the active account to nothing.
 	 */
 	virtual void setActiveAccount(const QString &username);
+        
+	/*!
+	 * Sets the account that has the given user name as the current active account.
+	 * If the username given is an empty string, sets the active account to nothing.
+	 */
+    virtual void setActiveAccountByCharacterName(const QString &charname);
 
 	/*!
 	 * Returns true if any of the account is at least Validated
